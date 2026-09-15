@@ -40,5 +40,47 @@ namespace AddressBookApp.Services
             .ToList();
         }
 
+        public void ViewByCity()
+        {
+            List<Contact> allContacts = books
+            .SelectMany(b=> b.Contacts)
+            .ToList();
+
+            var groups = allContacts
+                .GroupBy(c=>c.City)
+
+            Console.WriteLine("--- By City ---"); 
+
+            foreach(var group in groups)
+            {
+                Console.WriteLine(group.Key+":")
+                foreach(Contact contact in group)
+                {
+                    Console.WriteLine(" " + contact.FirstName + " " + contact.LastName); 
+                }
+            }
+        }
+
+        public void ViewByState()
+        {
+            List<Contact> allContacts = books
+            .SelectMany(b => b.Contacts)
+            .ToList();
+
+            var groups = allContacts
+                .GroupBy(c => c.State)
+
+            Console.WriteLine("--- By State ---");
+
+            foreach (var group in groups)
+            {
+                Console.WriteLine(group.Key + ":")
+                foreach (Contact contact in group)
+                {
+                    Console.WriteLine(" " + contact.FirstName + " " + contact.LastName);
+                }
+            }
+        }
+
     }
 }
