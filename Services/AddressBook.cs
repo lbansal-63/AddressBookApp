@@ -4,6 +4,7 @@ using System.Text;
 using AddressBookApp.Models;
 using AddressBookApp.Validation;
 
+
 namespace AddressBookApp.Services
 {
     public class AddressBook
@@ -15,6 +16,23 @@ namespace AddressBookApp.Services
         public void AddContact(Contact contact)
         {
             ContactValidator.Validate(contact);
+
+            bool exists = contact.Any(
+                    c => c.FirstName.Equals(
+                            contact.FirstName,
+                            StringComparison.OrdinalIgnoreCase
+                         )
+                         &&
+                         c.LastName.Equals(
+                            contact.LastName,
+                            StringComparison.OrdinalIgnoreCase
+                         )
+                    );
+
+            if (exists) {
+                Console.WriteLine($"Contact {contact.FirstName} {contact.LastName} already exits. Duplicate not added.");
+                return; 
+            }
 
             contacts.Add(contact);
 
