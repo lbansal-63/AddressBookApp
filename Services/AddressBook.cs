@@ -154,5 +154,17 @@ namespace AddressBookApp.Services
 
             Console.WriteLine("Contact deleted.");
         }
+
+        public void SortByName()
+        {
+            var sortedContacts = contacts
+                .OrderBy(c => c.FirstName)
+                .ThenBy(c => c.LastName);
+
+            for(Contact contact in sortedContacts)
+            {
+                Console.WriteLine(contact); 
+            }
+        }
     }
 }
