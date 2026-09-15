@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Linq; 
+using System.Linq;
+using AddressBookApp.Models; 
 
 namespace AddressBookApp.Services
 {
@@ -22,6 +23,21 @@ namespace AddressBookApp.Services
         public List<AddressBook> GetAddressBooks()
         {
             return books; 
+        }
+
+        public List<Contact> SearchByCity(string city)
+        {
+            return books
+            .SelectMany(b => b.Contacts)
+            .Where(c => c.City.Equals(city, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+        }
+        public List<Contact> SearchByState(string state)
+        {
+            return books
+            .SelectMany(b => b.Contacts)
+            .Where(c => c.State.Equals(state, StringComparison.OrdinalIgnoreCase))
+            .ToList();
         }
 
     }
