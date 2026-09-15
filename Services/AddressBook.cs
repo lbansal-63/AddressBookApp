@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using AddressBookApp.Models;
 using AddressBookApp.Validation;
-
 
 namespace AddressBookApp.Services
 {
@@ -13,25 +12,30 @@ namespace AddressBookApp.Services
 
         public IReadOnlyList<Contact> Contacts => contacts;
 
+        // UC3 + UC7
         public void AddContact(Contact contact)
         {
             ContactValidator.Validate(contact);
 
-            bool exists = contact.Any(
-                    c => c.FirstName.Equals(
-                            contact.FirstName,
-                            StringComparison.OrdinalIgnoreCase
-                         )
-                         &&
-                         c.LastName.Equals(
-                            contact.LastName,
-                            StringComparison.OrdinalIgnoreCase
-                         )
-                    );
+            bool exists = contacts.Any(
+                c => c.FirstName.Equals(
+                        contact.FirstName,
+                        StringComparison.OrdinalIgnoreCase
+                     )
+                     &&
+                     c.LastName.Equals(
+                        contact.LastName,
+                        StringComparison.OrdinalIgnoreCase
+                     )
+            );
 
-            if (exists) {
-                Console.WriteLine($"Contact {contact.FirstName} {contact.LastName} already exits. Duplicate not added.");
-                return; 
+            if (exists)
+            {
+                Console.WriteLine(
+                    $"Contact '{contact.FirstName} {contact.LastName}' already exists. Duplicate not added."
+                );
+
+                return;
             }
 
             contacts.Add(contact);
@@ -39,6 +43,7 @@ namespace AddressBookApp.Services
             Console.WriteLine("Contact added successfully.");
         }
 
+        // UC3
         public void PrintAll()
         {
             if (contacts.Count == 0)
@@ -53,11 +58,19 @@ namespace AddressBookApp.Services
             }
         }
 
+        // UC4
         public void EditContact(string firstName, string lastName)
         {
             Contact contact = contacts.Find(
-                c => c.FirstName.Equals(firstName, StringComparison.OrdinalIgnoreCase)
-                  && c.LastName.Equals(lastName, StringComparison.OrdinalIgnoreCase)
+                c => c.FirstName.Equals(
+                        firstName,
+                        StringComparison.OrdinalIgnoreCase
+                     )
+                     &&
+                     c.LastName.Equals(
+                        lastName,
+                        StringComparison.OrdinalIgnoreCase
+                     )
             );
 
             if (contact == null)
@@ -68,80 +81,72 @@ namespace AddressBookApp.Services
 
             Console.WriteLine("Editing: " + contact);
 
-            Console.Write("Enter new first name (or press Enter to keep): ");
-            string firstNameInput = Console.ReadLine();
+            Console.Write("Enter new first name: ");
+            string input = Console.ReadLine();
 
-            if (!string.IsNullOrWhiteSpace(firstNameInput))
-            {
-                contact.FirstName = firstNameInput;
-            }
+            if (!string.IsNullOrWhiteSpace(input))
+                contact.FirstName = input;
 
-            Console.Write("Enter new last name (or press Enter to keep): ");
-            string lastNameInput = Console.ReadLine();
+            Console.Write("Enter new last name: ");
+            input = Console.ReadLine();
 
-            if (!string.IsNullOrWhiteSpace(lastNameInput))
-            {
-                contact.LastName = lastNameInput;
-            }
+            if (!string.IsNullOrWhiteSpace(input))
+                contact.LastName = input;
 
-            Console.Write("Enter new address (or press Enter to keep): ");
-            string addressInput = Console.ReadLine();
+            Console.Write("Enter new address: ");
+            input = Console.ReadLine();
 
-            if (!string.IsNullOrWhiteSpace(addressInput))
-            {
-                contact.Address = addressInput;
-            }
+            if (!string.IsNullOrWhiteSpace(input))
+                contact.Address = input;
 
-            Console.Write("Enter new city (or press Enter to keep): ");
-            string cityInput = Console.ReadLine();
+            Console.Write("Enter new city: ");
+            input = Console.ReadLine();
 
-            if (!string.IsNullOrWhiteSpace(cityInput))
-            {
-                contact.City = cityInput;
-            }
+            if (!string.IsNullOrWhiteSpace(input))
+                contact.City = input;
 
-            Console.Write("Enter new state (or press Enter to keep): ");
-            string stateInput = Console.ReadLine();
+            Console.Write("Enter new state: ");
+            input = Console.ReadLine();
 
-            if (!string.IsNullOrWhiteSpace(stateInput))
-            {
-                contact.State = stateInput;
-            }
+            if (!string.IsNullOrWhiteSpace(input))
+                contact.State = input;
 
-            Console.Write("Enter new zip (or press Enter to keep): ");
-            string zipInput = Console.ReadLine();
+            Console.Write("Enter new zip: ");
+            input = Console.ReadLine();
 
-            if (!string.IsNullOrWhiteSpace(zipInput))
-            {
-                contact.Zip = zipInput;
-            }
+            if (!string.IsNullOrWhiteSpace(input))
+                contact.Zip = input;
 
-            Console.Write("Enter new phone (or press Enter to keep): ");
-            string phoneInput = Console.ReadLine();
+            Console.Write("Enter new phone: ");
+            input = Console.ReadLine();
 
-            if (!string.IsNullOrWhiteSpace(phoneInput))
-            {
-                contact.PhoneNumber = phoneInput;
-            }
+            if (!string.IsNullOrWhiteSpace(input))
+                contact.PhoneNumber = input;
 
-            Console.Write("Enter new email (or press Enter to keep): ");
-            string emailInput = Console.ReadLine();
+            Console.Write("Enter new email: ");
+            input = Console.ReadLine();
 
-            if (!string.IsNullOrWhiteSpace(emailInput))
-            {
-                contact.Email = emailInput;
-            }
+            if (!string.IsNullOrWhiteSpace(input))
+                contact.Email = input;
 
             ContactValidator.Validate(contact);
 
             Console.WriteLine("Contact updated.");
         }
 
+        // UC5
         public void DeleteContact(string firstName, string lastName)
         {
             Contact contact = contacts.Find(
-                c => c.FirstName.Equals(firstName, StringComparison.OrdinalIgnoreCase)
-                  && c.LastName.Equals(lastName, StringComparison.OrdinalIgnoreCase)
+                c => c.FirstName.Equals(
+                        firstName,
+                        StringComparison.OrdinalIgnoreCase
+                     )
+                     &&
+                     c.LastName.Equals(
+                        lastName,
+                        StringComparison.OrdinalIgnoreCase
+                     )
             );
 
             if (contact == null)
@@ -155,46 +160,50 @@ namespace AddressBookApp.Services
             Console.WriteLine("Contact deleted.");
         }
 
+        // UC11
         public void SortByName()
         {
             var sortedContacts = contacts
                 .OrderBy(c => c.FirstName)
                 .ThenBy(c => c.LastName);
 
-            for(Contact contact in sortedContacts)
+            foreach (Contact contact in sortedContacts)
             {
-                Console.WriteLine(contact); 
+                Console.WriteLine(contact);
             }
         }
 
+        // UC12
         public void SortByCity()
         {
             var sortedContacts = contacts
-                .OrderBy(c => c.City)
+                .OrderBy(c => c.City);
 
-            for(Contact contact in sortedContacts)
+            foreach (Contact contact in sortedContacts)
             {
                 Console.WriteLine(contact);
             }
         }
 
+        // UC12
         public void SortByState()
         {
             var sortedContacts = contacts
-                .OrderBy(c => c.State)
+                .OrderBy(c => c.State);
 
-            for(Contact contact in sortedContacts)
+            foreach (Contact contact in sortedContacts)
             {
                 Console.WriteLine(contact);
             }
         }
 
+        // UC12
         public void SortByZip()
         {
             var sortedContacts = contacts
-                .OrderBy(c => c.Zip)
+                .OrderBy(c => c.Zip);
 
-            for(Contact contact in sortedContacts)
+            foreach (Contact contact in sortedContacts)
             {
                 Console.WriteLine(contact);
             }
